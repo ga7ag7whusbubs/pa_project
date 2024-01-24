@@ -1,7 +1,10 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 import numpy as np
+from api import app_api
 
 app = Flask(__name__)
+app.register_blueprint(app_api)
+
 
 
 def simulate_elevator_continuous_full_motion(load, max_floor_height, Kp, Ki, Kd, elevator_weight,
