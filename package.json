@@ -1,17 +1,19 @@
 {
   "name": "pa-project",
   "version": "1.0.0",
-  "description": "Your project description",
+  "description": "",
   "main": "app.py",
   "scripts": {
-    "start": "python app.py"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "dependencies": {},
-  "devDependencies": {
-    "@netlify/plugin-functions-build": "*"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ga7ag7whusbubs/pa_project.git#main"
   },
-  "engines": {
-    "node": "14.x", 
-    "npm": "7.x"
-  }
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ga7ag7whusbubs/pa_project/issues"
+  },
+  "homepage": "https://github.com/ga7ag7whusbubs/pa_project/tree/main#readme"
 }
