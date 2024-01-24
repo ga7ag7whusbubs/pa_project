@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, jsonify
-import numpy as np
 from api import app_api
 
 app = Flask(__name__)
