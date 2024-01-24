@@ -16,4 +16,8 @@
     "url": "https://github.com/ga7ag7whusbubs/pa_project/issues"
   },
   "homepage": "https://github.com/ga7ag7whusbubs/pa_project/tree/main#readme"
+  "devDependencies": {
+    "@netlify/plugin-functions-build": "^1.0.0"
+  }
 }
+
