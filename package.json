@@ -6,13 +6,12 @@
   "scripts": {
     "start": "python app.py"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "@netlify/plugin-functions-build": "^1.0.0"
   },
   "engines": {
     "node": "14.x", 
-    "npm": "7.x",
+    "npm": "7.x"
   }
 }
