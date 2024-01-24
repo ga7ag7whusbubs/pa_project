@@ -9,3 +9,8 @@
 
 [[plugins]]
   package = "@netlify/plugin-functions-build"
+
+[context.production]
+  command = "pip install -r requirements.txt && python production_script.py"
+  publish = "."
+  timeout = 600
