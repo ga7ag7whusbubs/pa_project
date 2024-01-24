@@ -22,7 +22,7 @@
             </main>
             <aside>
                 <div>
-                    <form method="post" action="/" class="variable-inputs">
+                    <form id="simulationForm" class="variable-inputs">
                         <h1>Dane</h1>
                         <label for="load">Ładunek:</label>
                         <div class="input-group">
@@ -64,35 +64,60 @@
                         <div class="input-group">
                             <input required="" type="number" name="simulation_time" value="60" class="input">
                         </div>
-
-                        <a href="/"><button class="bn30" type="submit">Run Simulation</button></a>
+                        <a href="#" onclick="runSimulation();"><button class="bn30" type="button">Run Simulation</button></a>
                     </form>
                 </div>
             </aside>
         </div>
         <script>
-        {% if data_list %}
-            var pythonData = {{ data_list[0] | tojson | safe }};
-            console.log("pythonData:", pythonData);
-
-            var positionLabels = pythonData['time_interval'];
-            var positionData = pythonData['position_history'];
-            var numPeoplePosition = pythonData['num_people'];
-            var speedLabels = pythonData['time_interval'];
-            var speedData = pythonData['speed_history'];
-            var numPeopleSpeed = pythonData['num_people'];
-            var powerLabels = pythonData['time_interval'];
-            var powerData = pythonData['power_history'];
-            var numPeoplePower = pythonData['num_people'];
-            var forceLabels = pythonData['time_interval'];
-            var forceData = pythonData['force_history'];
-            var numPeopleForce = pythonData['num_people'];
-
-            createChart('positionChart', positionLabels, positionData, 'Zmiana położenia windy', 'Czas symulacji (s)', 'Wysokość [m]', numPeoplePosition, 'rgba(75, 192, 192, 0.5)', 1, '#F5F7FA');
-            createChart('speedChart', speedLabels, speedData, 'Zmiana prędkości windy', 'Czas symulacji (s)', 'Prędkość [m/s^2]', numPeopleSpeed, 'rgba(75, 192, 192, 0.5)', 1, '#F5F7FA');
-            createChart('powerChart', powerLabels, powerData, 'Zmiana mocy silnika windy', 'Czas symulacji (s)', 'Moc silnika [W]', numPeoplePower, 'rgba(75, 192, 192, 0.5)', 1, '#F5F7FA');
-            createChart('forceChart', forceLabels, forceData, 'Zmiana sił działających na windę', 'Czas symulacji (s)', 'Siła działająca na windę [N]', numPeopleForce, 'rgba(75, 192, 192, 0.5)', 1, '#F5F7FA');
-        {% endif %}
+        function runSimulation() {
+            var formData = {
+                load: parseFloat(document.getElementById('load').value),
+                max_floor_height: parseFloat(document.getElementById('max_floor_height').value),
+                Kp: parseFloat(document.getElementById('Kp').value),
+                Ki: parseFloat(document.getElementById('Ki').value),
+                Kd: parseFloat(document.getElementById('Kd').value),
+                elevator_weight: parseFloat(document.getElementById('elevator_weight').value),
+                avg_person_weight: parseFloat(document.getElementById('avg_person_weight').value),
+                simulation_time: parseFloat(document.getElementById('simulation_time').value)
+            };
+            fetch('/api/generate_chart', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                updateCharts(data);
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    
+        function updateCharts(data) {
+            {% if data_list %}
+                var pythonData = {{ data_list[0] | tojson | safe }};
+                console.log("pythonData:", pythonData);
+    
+                var positionLabels = pythonData['time_interval'];
+                var positionData = pythonData['position_history'];
+                var numPeoplePosition = pythonData['num_people'];
+                var speedLabels = pythonData['time_interval'];
+                var speedData = pythonData['speed_history'];
+                var numPeopleSpeed = pythonData['num_people'];
+                var powerLabels = pythonData['time_interval'];
+                var powerData = pythonData['power_history'];
+                var numPeoplePower = pythonData['num_people'];
+                var forceLabels = pythonData['time_interval'];
+                var forceData = pythonData['force_history'];
+                var numPeopleForce = pythonData['num_people'];
+    
+                createChart('positionChart', positionLabels, positionData, 'Zmiana położenia windy', 'Czas symulacji (s)', 'Wysokość [m]', numPeoplePosition, 'rgba(75, 192, 192, 0.5)', 1, '#F5F7FA');
+                createChart('speedChart', speedLabels, speedData, 'Zmiana prędkości windy', 'Czas symulacji (s)', 'Prędkość [m/s^2]', numPeopleSpeed, 'rgba(75, 192, 192, 0.5)', 1, '#F5F7FA');
+                createChart('powerChart', powerLabels, powerData, 'Zmiana mocy silnika windy', 'Czas symulacji (s)', 'Moc silnika [W]', numPeoplePower, 'rgba(75, 192, 192, 0.5)', 1, '#F5F7FA');
+                createChart('forceChart', forceLabels, forceData, 'Zmiana sił działających na windę', 'Czas symulacji (s)', 'Siła działająca na windę [N]', numPeopleForce, 'rgba(75, 192, 192, 0.5)', 1, '#F5F7FA');
+            {% endif %}
 
         function createChart(chartId, labels, data, label, xAxisLabel, yAxisLabel, numPeople, lineColor, lineWidth, color) {
             var ctx = document.getElementById(chartId).getContext('2d');
