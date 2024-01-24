@@ -1,10 +1,11 @@
 [build]
-  command = "pip install -r requirements.txt && gunicorn -b 0.0.0.0:5000 app:app"
-  functions = "functions/"
-  publish = "."
-  timeout = 900
-
-[context.production]
   command = "pip install -r requirements.txt && python app.py"
-  publish = "."
-  timeout = 600
+  functions = "functions"
+  publish = "/path/to/publish_directory"
+  log = "debug"
+
+[build.environment]
+  PYTHON_VERSION = "3.8"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-build"
